@@ -7,7 +7,6 @@ on:
 
 jobs:
   run-ml-pipeline:
-    runs-size: ubuntu-latest
     runs-on: ubuntu-latest
 
     steps:
@@ -19,8 +18,7 @@ jobs:
     - name: Set up Python 3.11
       uses: actions/setup-python@v4
       with:
-        python-size: 3.11
-        python-version: 3.11
+        python-version: '3.11'
 
     # 3. Check Env
     - name: Check Environment Info
@@ -36,11 +34,11 @@ jobs:
     # 5. Run mlflow project
     - name: Run MLflow Project (Re-training)
       run: |
-        mlflow run Workflow-CI --no-conda
+        mlflow run Workflow_CI --no-conda
 
     # 6. Upload to GitHub Artifacts (Syarat mutlak tingkat SKILLED)
     - name: Upload Trained Model Artifact to GitHub
       uses: actions/upload-artifact@v4
       with:
         name: trained-model-artifact
-        path: Workflow-CI/outputs/model.pkl
+        path: Workflow_CI/outputs/model.pkl
