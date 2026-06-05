@@ -10,35 +10,36 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # 1. Set up job & Run actions/checkout
+    # 1. Menyiapkan job & Menjalankan actions/checkout [cite: 197, 198]
     - name: Checkout Repository
       uses: actions/checkout@v3
 
-    # 2. Set up Python
+    # 2. Menyiapkan lingkungan Python [cite: 199]
     - name: Set up Python 3.11
       uses: actions/setup-python@v4
       with:
         python-version: '3.11'
 
-    # 3. Check Env
+    # 3. Memeriksa info environment [cite: 200]
     - name: Check Environment Info
       run: |
         python --version
         pip --version
 
-    # 4. Install dependencies
+    # 4. Menginstal dependensi library [cite: 201]
     - name: Install MLflow & Core Dependencies
       run: |
         pip install pandas numpy scikit-learn mlflow joblib
 
-    # 5. Run mlflow project
+    # 5. Menjalankan fungsi training ulang lewat MLflow Project [cite: 202]
+    # Menggunakan '--env-manager local' sebagai pengganti '--no-conda' versi terbaru
     - name: Run MLflow Project (Re-training)
       run: |
-        mlflow run Workflow_CI --no-conda
+        mlflow run . --env-manager local
 
-    # 6. Upload to GitHub Artifacts (Syarat mutlak tingkat SKILLED)
+    # 6. Mengunggah berkas model biner (.pkl) ke GitHub Artifacts [cite: 401]
     - name: Upload Trained Model Artifact to GitHub
       uses: actions/upload-artifact@v4
       with:
         name: trained-model-artifact
-        path: Workflow_CI/outputs/model.pkl
+        path: outputs/model.pkl
