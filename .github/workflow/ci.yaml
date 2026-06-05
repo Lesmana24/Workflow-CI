@@ -1,0 +1,46 @@
+name: Machine Learning Workflow CI
+
+# Otomatis berjalan setiap kali kamu melakukan 'push' ke branch main
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  run-ml-pipeline:
+    runs-size: ubuntu-latest
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Set up job & Run actions/checkout
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    # 2. Set up Python
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        python-size: 3.11
+        python-version: 3.11
+
+    # 3. Check Env
+    - name: Check Environment Info
+      run: |
+        python --version
+        pip --version
+
+    # 4. Install dependencies
+    - name: Install MLflow & Core Dependencies
+      run: |
+        pip install pandas numpy scikit-learn mlflow joblib
+
+    # 5. Run mlflow project
+    - name: Run MLflow Project (Re-training)
+      run: |
+        mlflow run Workflow-CI --no-conda
+
+    # 6. Upload to GitHub Artifacts (Syarat mutlak tingkat SKILLED)
+    - name: Upload Trained Model Artifact to GitHub
+      uses: actions/upload-artifact@v4
+      with:
+        name: trained-model-artifact
+        path: Workflow-CI/outputs/model.pkl
