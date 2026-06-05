@@ -1,6 +1,5 @@
 name: Machine Learning Workflow CI
 
-# Otomatis berjalan setiap kali kamu melakukan 'push' ke branch main
 on:
   push:
     branches: [ main ]
@@ -10,36 +9,35 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # 1. Menyiapkan job & Menjalankan actions/checkout [cite: 197, 198]
+    # 1. Menyiapkan job & Menjalankan actions/checkout
     - name: Checkout Repository
       uses: actions/checkout@v3
 
-    # 2. Menyiapkan lingkungan Python [cite: 199]
+    # 2. Menyiapkan lingkungan Python
     - name: Set up Python 3.11
       uses: actions/setup-python@v4
       with:
         python-version: '3.11'
 
-    # 3. Memeriksa info environment [cite: 200]
+    # 3. Memeriksa info environment
     - name: Check Environment Info
       run: |
         python --version
         pip --version
 
-    # 4. Menginstal dependensi library [cite: 201]
+    # 4. Menginstal dependensi library
     - name: Install MLflow & Core Dependencies
       run: |
         pip install pandas numpy scikit-learn mlflow joblib
 
-    # 5. Menjalankan fungsi training ulang lewat MLflow Project [cite: 202]
-    # Menggunakan '--env-manager local' sebagai pengganti '--no-conda' versi terbaru
+    # 5. Menjalankan fungsi training ulang lewat MLflow Project
     - name: Run MLflow Project (Re-training)
       run: |
-        mlflow run . --env-manager local
+        mlflow run MLProject --env-manager local
 
-    # 6. Mengunggah berkas model biner (.pkl) ke GitHub Artifacts [cite: 401]
+    # 6. Mengunggah berkas model biner (.pkl) ke GitHub Artifacts
     - name: Upload Trained Model Artifact to GitHub
       uses: actions/upload-artifact@v4
       with:
         name: trained-model-artifact
-        path: outputs/model.pkl
+        path: MLProject/outputs/model.pkl

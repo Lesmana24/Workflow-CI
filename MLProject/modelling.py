@@ -19,11 +19,9 @@ def train_model_ci():
     model = RandomForestClassifier(n_estimators=100, max_depth=5, random_state=42)
     model.fit(X_train, y_train)
     
-    # Membuat folder outputs untuk menyimpan model hasil training
     output_dir = os.path.join(BASE_DIR, "outputs")
     os.makedirs(output_dir, exist_ok=True)
     
-    # Menyimpan file model biner (.pkl)
     model_file_path = os.path.join(output_dir, "model.pkl")
     joblib.dump(model, model_file_path)
     
